@@ -11,7 +11,6 @@ let a = [
 const result = {};
 let version = "1";
 a.forEach(line => {
-    let match = line.match(/\((\d)\)/)
-    if (match) version = match[1];
+
     console.log(version)
 })
