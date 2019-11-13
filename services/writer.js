@@ -1,6 +1,6 @@
 const fs = require("fs");
 const json2csv = require('json2csv').parse;
-const { checkParams } = require('check');
+const { checkParams } = require('./check');
 
 const getFormat = name => {
     const format = (name.split("."));
@@ -29,16 +29,20 @@ const processing = {
  * @fileName = `${fileName}.${format}`
  */
 module.exports = {
-    read: async ({ content, fileName, path }) => {
+    do: async (content, fileName, path) => {
         try {
             checkParams({ content, fileName }, "content, fileName")
             if (!content.length) {
                 console.log(`Warning! Report ${fileName} is empty`);
                 return;
             };
-    
+
+            console.log(fileName)
             let format = getFormat(fileName);
             path = path ? path : "../files/"
+            if (!path.endsWith("/")) path += "/";
+
+            console.log(format)
             await processing[format](content, path + fileName)
         } catch (error) {
             console.log("Error create report file:", error);

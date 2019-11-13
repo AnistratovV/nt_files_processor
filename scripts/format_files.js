@@ -1,6 +1,8 @@
 const fs = require("fs");
 const json2csv = require('json2csv').parse;
 const argv = require("yargs").argv;
+const read = require("../services/reader")
+const writer = require("../services/writer")
 const count = argv.c + 1 || 2; // count files
 
 const sendReport = (content, fileName) => {
@@ -54,12 +56,13 @@ const readFiles = async () => {
 }
 
 const main = async () => {
-    const content = await readFiles();
     // write report
-    for (let i = 0; i < content.length; i++) {
-        let n = i + 1;
-        await sendReport(content[i]["v1"], `${n}v${1}`);
-        await sendReport(content[i]["v2"], `${n}v${2}`);
+    for (let i = 1; i < count; i++) {
+        const content = await read(i);
+        for (const version in content) {
+            const file = content[version];
+            await writer.do(file, `${i}${version}.csv`, "../files/csv");
+        }
     }
     console.log("END");
     process.exit(0)
