@@ -1,8 +1,10 @@
 const fs = require("fs");
 const json2csv = require('json2csv').parse;
 const csv = require("csvtojson");
-const found_value = "0,1011";
 const argv = require("yargs").argv;
+const moment = require("moment-timezone");
+
+const now = moment(new Date()).tz("europe/moscow").format("DD_MM_YYYY_hh_mm_a")
 const count = argv.c + 1 || 2; // count files
 if (!argv.u) {
     throw new Error("Missing required parameter 'u'. Please enter 'u' with command. Example: node ... -u=1,4214")
@@ -10,6 +12,7 @@ if (!argv.u) {
     // fix format
     argv.u = argv.u.replace(".", ",")
 }
+const mode = argv.i ? "inverse" : "default";
 
 const sendReport = (content, fileName) => {
     if (!content || !content.length) {
@@ -80,7 +83,7 @@ const main = async () => {
         results.push(result);
     }
     // write report
-    await sendReport(results, "results_proccessing");
+    await sendReport(results, `${mode}_${argv.u}_results_proccessing_${now}`);
     console.log("END");
     process.exit(0)
 }

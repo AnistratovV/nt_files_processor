@@ -18,6 +18,7 @@
     "csvtojson": "^2.0.10",
     "fs": "0.0.1-security",
     "json2csv": "^4.5.4",
+    "moment-timezone": "^0.5.27",
     "yargs": "^14.2.0"
   },
   "nodemonConfig": {
